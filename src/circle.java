@@ -1,57 +1,67 @@
 import java.awt.*;
-import java.applet.*;
 import javax.swing.JPanel;
-import java.awt.Graphics;
 public class circle extends JPanel{
-	Graphics i;
-	int x=500;
-	int y=250;
-	int isColliding=0;
-	int isCollidingx = 0, isCollidingy = 0;
-	int xAccel=(int)Math.round(Math.random()*2+1)*(int)Math.round(Math.random()*-1+1);
-	int yAccel=(int)Math.round(Math.random()*2+1)*(int)Math.round(Math.random()*-1+1);
-	public int target = 0;
-	public circle(Graphics g){
-		g=i;
+	static int x=500;
+	static int y=250;
+	static int isColliding=0;
+	static int isCollidingx = 0, isCollidingy = 0;
+	static int xAccel=(int)Math.round(Math.random()*2+1)*(int)Math.round(Math.random()*-1+1);
+	static int yAccel=(int)Math.round(Math.random()*2+1)*(int)Math.round(Math.random()*-1+1);
+	static public int target = 0;
+	public circle(){
 	}
-	public void paint(Graphics g){
-		g=i;
+	public void paintComponent(Graphics g){
 		initialize(g);
+		System.out.println("hi");
+		repaint();
 	}
-	void respawn(int side){
+	static void respawn(int side){
 		target = 0;
 		x=500;
 		y=250;
 		isColliding=0;
 		isCollidingx = 0;
 		isCollidingy = 0;
-		if(side==1){
-			xAccel=(int)Math.round(Math.random()*7.5+5)*-1;
+		if(side!=1){
+			xAccel=(int)Math.round(Math.random()*5+2.5)*-1;
 		}
 		else{	
-			xAccel=(int)Math.round(Math.random()*7.5+5);
+			xAccel=(int)Math.round(Math.random()*5+2.5);
 		}
 		if(Math.round(Math.random()+1)<0){
-			yAccel=(int)Math.round(Math.random()*7.5+5)*-1;
+			yAccel=(int)Math.round(Math.random()*5+2.5)*-1;
 		}
 		else{
-			yAccel=(int)Math.round(Math.random()*7.5+5);
+			yAccel=(int)Math.round(Math.random()*5+2.5);
 		}
 	}
-	public void initialize(Graphics g){
+	public static void initialize(Graphics g){
+		g.setColor(Color.white);
 		g.fillRect(x,y,10,10);
-		i=g;
 		x+=xAccel;
 		if(target == 1){
-			y+=yAccel+(mainCode.player1.xAccel/1.5);
+			y+=yAccel+(mainCode.player1.xAccel/2);
 		}
 		else if(target == 2){
-			y+=yAccel+(mainCode.player2.xAccel/1.5);
+			y+=yAccel+(mainCode.player2.xAccel/2);
 		}
 		else{
 			y+=yAccel;
 		}
-		
+		if((y>490)&&(isCollidingy == 0)){
+			yAccel=yAccel*-1;
+			isCollidingy=1;
+			isColliding=1;
+			y = 490;
+		}
+		else if((y<1)&&(isCollidingy == 0)){
+			yAccel=yAccel*-1;
+			isCollidingy=1;
+			y = 1;
+		}else{
+			isCollidingy=0;
+			isColliding=0;
+		}
 		//System.out.println(xAccel + " " + yAccel);
 				if((y<mainCode.player1.x+75)&&(y+10>mainCode.player1.x)&&(x<25)){
 					if(isColliding==0){
@@ -92,18 +102,6 @@ public class circle extends JPanel{
 			}
 			else{
 				isCollidingx=0;
-				isColliding=0;
-			}
-			if((y>490)&&(isCollidingy == 0)){
-				yAccel=yAccel*-1;
-				isCollidingy=1;
-				isColliding=1;
-			}
-			else if((y<1)&&(isCollidingy == 0)){
-				yAccel=yAccel*-1;
-				isCollidingy=1;
-			}else{
-				isCollidingy=0;
 				isColliding=0;
 			}
 			

@@ -1,9 +1,8 @@
 import java.awt.*;
 import java.applet.*;
-import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
-public class square{
+public class square extends JPanel{
 	Graphics g;
 	int x=250;
 	int y;
@@ -14,6 +13,12 @@ public class square{
 	public boolean isActive = false;
 	public int oneOrTwo;
 
+	public void paintComponent(Graphics g){
+		g.setColor(Color.white);
+		initialize(g);
+		repaint();
+	}
+	
 	public square(int y, int oneOrTwo){
 		this.y=y;
 		this.oneOrTwo = oneOrTwo;
@@ -34,26 +39,36 @@ public class square{
 		pointsString = ""+points;
 	}
 
+	int increment = (int)Math.round(Math.random()*25)+10;
+	int count = 0;
+	int e = 1;
 	public void moveCPU(){
-		int e;
+		
 		if(mainCode.circle1.target == oneOrTwo){
-			if(Math.random()>=.50){
-				e=-5;
+			
+			if(count == increment){
+				if(e==1){
+					e=-1;
+				}
+				else{
+					e=1;
+				}
+				increment = (int)Math.round(Math.random()*25)+10;
+				count = 0;
 			}
 			else{
-				e=5;
+				count++;
 			}
-			try{
-				Thread.sleep(100);
-			}
-			catch(Exception eee){}
+			System.out.println(increment);
+			System.out.println(count);
+			System.out.println(e);
 		}
 		else{
-			if(((x>mainCode.circle1.y))&&(x>-1)){
-				e=-5;
+			if(((x>Math.ceil((mainCode.circle1.y-30)/10)*10))&&(x>-1)){
+				e=-1;
 			}
-			else if(((x<mainCode.circle1.y-75))&&(x<424)){
-				e=5;
+			else if((x<Math.floor((mainCode.circle1.y-30)/10)*10)&&(x<424)){
+				e=1;
 			}
 			else{
 				e=0;
@@ -66,11 +81,11 @@ public class square{
 			}
 			else{
 				if(xAccel<-10){
-					xAccel+=5;
+					xAccel+=1;
 					x+=xAccel;
 				}
 				else if(xAccel>10){
-					xAccel-=5;
+					xAccel-=1;
 					x+=xAccel;
 				}
 				else{
